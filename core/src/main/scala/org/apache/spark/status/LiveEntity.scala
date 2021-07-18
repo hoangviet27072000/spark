@@ -19,9 +19,11 @@ package org.apache.spark.status
 
 import java.util.Date
 import java.util.concurrent.atomic.AtomicInteger
+
 import scala.collection.JavaConverters._
 import scala.collection.immutable.{HashSet, TreeSet}
 import scala.collection.mutable.HashMap
+
 import org.apache.spark.JobExecutionStatus
 import org.apache.spark.errors.ExecutionErrors
 import org.apache.spark.executor.{ExecutorMetrics, TaskMetrics}
