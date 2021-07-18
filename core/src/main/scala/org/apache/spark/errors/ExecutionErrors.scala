@@ -116,10 +116,6 @@ private[spark] object ExecutionErrors {
     new NotFoundException(s"No tasks reported metrics for $stageId / $stageAttemptId yet.")
   }
 
-  def badParameterError(param: String, exp: String, s: String): Throwable = {
-    new BadParameterException("quantiles", "double", s)
-  }
-
   def webApplicationError(originalValue: String): Throwable = {
     new WebApplicationException(
       Response
@@ -128,4 +124,9 @@ private[spark] object ExecutionErrors {
         .build()
     )
   }
+
+  def badParameterError(param: String, exp: String, s: String): Throwable = {
+    new BadParameterException("quantiles", "double", s)
+  }
+
 }
