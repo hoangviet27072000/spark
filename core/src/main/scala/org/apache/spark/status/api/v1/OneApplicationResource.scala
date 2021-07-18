@@ -25,6 +25,7 @@ import javax.ws.rs.core.{MediaType, Response, StreamingOutput}
 import scala.util.control.NonFatal
 
 import org.apache.spark.{JobExecutionStatus, SparkContext}
+import org.apache.spark.errors.ExecutionErrors
 import org.apache.spark.status.api.v1
 import org.apache.spark.util.Utils
 
@@ -44,7 +45,7 @@ private[v1] class AbstractApplicationResource extends BaseAppResource {
       ui.store.job(jobId)
     } catch {
       case _: NoSuchElementException =>
-        throw new NotFoundException("unknown job: " + jobId)
+        throw ExecutionErrors.notFoundJobId(jobId)
     }
   }
 
@@ -56,22 +57,21 @@ private[v1] class AbstractApplicationResource extends BaseAppResource {
   @Path("executors/{executorId}/threads")
   def threadDump(@PathParam("executorId") execId: String): Array[ThreadStackTrace] = withUI { ui =>
     if (execId != SparkContext.DRIVER_IDENTIFIER && !execId.forall(Character.isDigit)) {
-      throw new BadParameterException(
-        s"Invalid executorId: neither '${SparkContext.DRIVER_IDENTIFIER}' nor number.")
+      throw ExecutionErrors.badParameterError(SparkContext.DRIVER_IDENTIFIER)
     }
 
     val safeSparkContext = ui.sc.getOrElse {
-      throw new ServiceUnavailable("Thread dumps not available through the history server.")
+      throw ExecutionErrors.serviceUnavailableError()
     }
 
     ui.store.asOption(ui.store.executorSummary(execId)) match {
       case Some(executorSummary) if executorSummary.isActive =>
           val safeThreadDump = safeSparkContext.getExecutorThreadDump(execId).getOrElse {
-            throw new NotFoundException("No thread dump is available.")
+            throw ExecutionErrors.notFoundThread()
           }
           safeThreadDump
-      case Some(_) => throw new BadParameterException("Executor is not active.")
-      case _ => throw new NotFoundException("Executor does not exist.")
+      case Some(_) => throw ExecutionErrors.notFoundExecutor()
+      case _ => throw ExecutionErrors.executorNotActive()
     }
   }
 
@@ -97,7 +97,7 @@ private[v1] class AbstractApplicationResource extends BaseAppResource {
       ui.store.rdd(rddId)
     } catch {
       case _: NoSuchElementException =>
-        throw new NotFoundException(s"no rdd found w/ id $rddId")
+        throw ExecutionErrors.notFoundRdd(rddId)
     }
   }
 
@@ -155,7 +155,7 @@ private[v1] class AbstractApplicationResource extends BaseAppResource {
         .build()
     } catch {
       case NonFatal(_) =>
-        throw new ServiceUnavailable(s"Event logs are not available for app: $appId.")
+        throw ExecutionErrors.serviceUnavailableError(appId)
     }
   }
 
@@ -166,7 +166,7 @@ private[v1] class AbstractApplicationResource extends BaseAppResource {
   @Path("{attemptId}")
   def applicationAttempt(): Class[OneApplicationAttemptResource] = {
     if (attemptId != null) {
-      throw new NotFoundException(httpRequest.getRequestURI())
+      throw ExecutionErrors.notFoundHttpRequest(httpRequest.getRequestURI())
     }
     classOf[OneApplicationAttemptResource]
   }
@@ -178,7 +178,7 @@ private[v1] class OneApplicationResource extends AbstractApplicationResource {
   @GET
   def getApp(): ApplicationInfo = {
     val app = uiRoot.getApplicationInfo(appId)
-    app.getOrElse(throw new NotFoundException("unknown app: " + appId))
+    app.getOrElse(throw ExecutionErrors.notFoundAppId(appId))
   }
 
 }
@@ -192,7 +192,7 @@ private[v1] class OneApplicationAttemptResource extends AbstractApplicationResou
         app.attempts.find(_.attemptId.contains(attemptId))
       }
       .getOrElse {
-        throw new NotFoundException(s"unknown app $appId, attempt $attemptId")
+        throw ExecutionErrors.notFoundAppIddAndAttemptId(appId, attemptId)
       }
   }
 

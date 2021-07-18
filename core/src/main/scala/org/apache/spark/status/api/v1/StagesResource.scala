@@ -22,6 +22,7 @@ import javax.ws.rs.core.{Context, MediaType, MultivaluedMap, UriInfo}
 
 import scala.collection.JavaConverters._
 
+import org.apache.spark.errors.ExecutionErrors
 import org.apache.spark.status.api.v1.TaskStatus._
 import org.apache.spark.ui.UIUtils
 import org.apache.spark.ui.jobs.ApiHelper._
@@ -75,7 +76,7 @@ private[v1] class StagesResource extends BaseAppResource {
       if (ret.nonEmpty) {
         ret
       } else {
-        throw new NotFoundException(s"unknown stage: $stageId")
+        throw ExecutionErrors.notFoundStageId(stageId)
       }
     }
   }
@@ -104,7 +105,12 @@ private[v1] class StagesResource extends BaseAppResource {
         } else {
           s"unknown stage: $stageId"
         }
-        throw new NotFoundException(msg)
+        throw ExecutionErrors.notFound(if (all.nonEmpty) {
+          val ids = all.map(_.attemptId)
+          s"unknown attempt for stage $stageId.  Found attempts: [${ids.mkString(",")}]"
+        } else {
+          s"unknown stage: $stageId"
+        })
     }
   }
 
@@ -117,7 +123,7 @@ private[v1] class StagesResource extends BaseAppResource {
   : TaskMetricDistributions = withUI { ui =>
     val quantiles = parseQuantileString(quantileString)
     ui.store.taskSummary(stageId, stageAttemptId, quantiles).getOrElse(
-      throw new NotFoundException(s"No tasks reported metrics for $stageId / $stageAttemptId yet."))
+      throw ExecutionErrors.noTasksReportMetrics(stageId, stageAttemptId))
   }
 
   @GET
@@ -263,7 +269,7 @@ private[v1] class StagesResource extends BaseAppResource {
         s.toDouble
       } catch {
         case nfe: NumberFormatException =>
-          throw new BadParameterException("quantiles", "double", s)
+          throw ExecutionErrors.badParameterError("quantiles", "double", s)
       }
     }
   }
