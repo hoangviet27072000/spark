@@ -87,4 +87,5 @@ class AnalysisException protected[sql] (
   } else {
     message
   }
+  
 }
