@@ -20,7 +20,7 @@ package org.apache.spark.resource
 import java.io.File
 import java.util.Optional
 
-import org.apache.spark.{SparkConf, SparkException}
+import org.apache.spark.SparkConf
 import org.apache.spark.annotation.DeveloperApi
 import org.apache.spark.api.resource.ResourceDiscoveryPlugin
 import org.apache.spark.errors.ExecutionErrors

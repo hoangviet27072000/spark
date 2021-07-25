@@ -19,7 +19,6 @@ package org.apache.spark.resource
 
 import scala.collection.mutable
 
-import org.apache.spark.SparkException
 import org.apache.spark.errors.ExecutionErrors
 
 /**
