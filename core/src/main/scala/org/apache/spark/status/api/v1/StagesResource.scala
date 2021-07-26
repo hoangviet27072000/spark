@@ -16,14 +16,14 @@
  */
 package org.apache.spark.status.api.v1
 
-import java.util.{HashMap, Locale, List => JList}
+import java.util.{HashMap, List => JList, Locale}
 import javax.ws.rs.{NotFoundException => _, _}
 import javax.ws.rs.core.{Context, MediaType, MultivaluedMap, UriInfo}
 
 import scala.collection.JavaConverters._
 
-import org.apache.spark.status.api.v1.TaskStatus._
 import org.apache.spark.errors.ExecutionErrors
+import org.apache.spark.status.api.v1.TaskStatus._
 import org.apache.spark.ui.UIUtils
 import org.apache.spark.ui.jobs.ApiHelper._
 import org.apache.spark.util.Utils
