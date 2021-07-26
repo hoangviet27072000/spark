@@ -108,9 +108,10 @@ private[spark] object ExecutionErrors {
     new NotFoundException(s"unknown stage: $stageId")
   }
 
-  def notFound(msg: String): Throwable = {
-    new NotFoundException(msg)
+  def notFoundTrueAttempt(stageId: Int, msg: String): Throwable = {
+    new NotFoundException( s"unknown attempt for stage $stageId.  Found attempts: [$msg]")
   }
+
 
   def noTasksReportMetrics(stageId: Int, stageAttemptId: Int): Throwable = {
     new NotFoundException(s"No tasks reported metrics for $stageId / $stageAttemptId yet.")
