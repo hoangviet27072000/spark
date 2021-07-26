@@ -22,6 +22,11 @@ import java.util.{HashMap, Locale, List => JList}
 import javax.ws.rs.{NotFoundException => _, _}
 import javax.ws.rs.core.{Context, MediaType, MultivaluedMap, UriInfo}
 import scala.collection.JavaConverters._
+<<<<<<< HEAD
+=======
+
+import org.apache.spark.errors.ExecutionErrors
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b
 import org.apache.spark.status.api.v1.TaskStatus._
 import org.apache.spark.ui.UIUtils
 import org.apache.spark.ui.jobs.ApiHelper._
@@ -104,7 +109,16 @@ private[v1] class StagesResource extends BaseAppResource {
         } else {
           s"unknown stage: $stageId"
         }
+<<<<<<< HEAD
         throw ExecutionErrors.notFound(msg)
+=======
+        throw ExecutionErrors.notFound(if (all.nonEmpty) {
+          val ids = all.map(_.attemptId)
+          s"unknown attempt for stage $stageId.  Found attempts: [${ids.mkString(",")}]"
+        } else {
+          s"unknown stage: $stageId"
+        })
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b
     }
   }
 
@@ -263,7 +277,11 @@ private[v1] class StagesResource extends BaseAppResource {
         s.toDouble
       } catch {
         case nfe: NumberFormatException =>
+<<<<<<< HEAD
           throw ExecutionErrors.badParameterErrors(s)
+=======
+          throw ExecutionErrors.badParameterError("quantiles", "double", s)
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b
       }
     }
   }

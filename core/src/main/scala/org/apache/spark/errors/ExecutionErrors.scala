@@ -116,7 +116,11 @@ private[spark] object ExecutionErrors {
     new NotFoundException(s"No tasks reported metrics for $stageId / $stageAttemptId yet.")
   }
 
+<<<<<<< HEAD
   def badParameterErrors(s: String): Throwable = {
+=======
+  def badParameterError(param: String, exp: String, s: String): Throwable = {
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b
     new BadParameterException("quantiles", "double", s)
   }
 
@@ -128,5 +132,9 @@ private[spark] object ExecutionErrors {
         .build()
     )
   }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b

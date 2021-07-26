@@ -70,8 +70,13 @@ private[v1] class AbstractApplicationResource extends BaseAppResource {
             throw ExecutionErrors.notFoundThread()
           }
           safeThreadDump
+<<<<<<< HEAD
       case Some(_) => throw ExecutionErrors.executorNotActive()
       case _ => throw ExecutionErrors.notFoundExecutor()
+=======
+      case Some(_) => throw ExecutionErrors.notFoundExecutor()
+      case _ => throw ExecutionErrors.executorNotActive()
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b
     }
   }
 

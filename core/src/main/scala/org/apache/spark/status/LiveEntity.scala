@@ -862,7 +862,11 @@ private class RDDPartitionSeq extends Seq[v1.RDDPartitionInfo] {
           current = tmp.next
           tmp.value
         } else {
+<<<<<<< HEAD
            throw ExecutionErrors.noSuchElement()
+=======
+          throw ExecutionErrors.noSuchElement()
+>>>>>>> 707a669e1bf579a90cfec1e1cd91b6ddc16fc38b
         }
       }
     }
