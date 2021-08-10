@@ -3,6 +3,24 @@
     "message" : [ "Field name %s is ambiguous and has %s matching fields in the struct." ],
     "sqlState" : "42000"
   },
+  "BUILD_READER_UNSUPPORTED_FOR_FILE_FORMAT_ERROR" : {
+    "message" : [ "buildReader is not supported for %s" ],
+    "sqlState" : "42000"
+  },
+  "CANNOT_CLEAR_OUTPUT_DIRECTORY_ERROR" : {
+    "message" : [ "Unable to clear output directory %s prior to writing to it" ]
+  },
+  "CANNOT_CLEAR_PARTITION_DIRECTORY_ERROR" : {
+    "message" : [ "Unable to clear partition directory %s prior to writing to it" ]
+  },
+  "CANNOT_DROP_NONEMPTY_NAMESPACE_ERROR" : {
+    "message" : [ "Cannot drop a non-empty namespace: %s. Use CASCADE option to drop a non-empty namespace" ],
+    "sqlState" : "42000"
+  },
+  "CREATE_STREAMING_SOURCE_NOT_SPECIFY_SCHEMA_ERROR" : {
+    "message" : [ "Schema must be specified when creating a streaming source DataFrame. If some\nfiles already exist in the directory, then depending on the file format you\nmay be able to create a static DataFrame on that directory with\n'spark.read.load(directory)' and infer schema from it." ],
+    "sqlState" : "42000"
+  },
   "DIVIDE_BY_ZERO" : {
     "message" : [ "divide by zero" ],
     "sqlState" : "22012"
@@ -10,6 +28,20 @@
   "DUPLICATE_KEY" : {
     "message" : [ "Found duplicate keys '%s'" ],
     "sqlState" : "23000"
+  },
+  "END_OF_STREAM_ERROR" : {
+    "message" : [ "End of stream" ]
+  },
+  "FAILED_TO_CAST_VALUE_TO_DATATYPE_FOR_PARTITION_COLUMN_ERROR" : {
+    "message" : [ "Failed to cast value `%s` to `%s` for partition column `%s`" ],
+    "sqlState" : "22018"
+  },
+  "FAILED_TO_FIND_DATASOURCE_ERROR" : {
+    "message" : [ "Failed to find data source: %s. Please find packages at http://spark.apache.org/third-party-projects.html" ],
+    "sqlState" : "42000"
+  },
+  "FALLBACK_V1_RELATION_REPORTS_INCONSISTENT_SCHEMA_ERROR" : {
+    "message" : [ "The fallback v1 relation reports inconsistent schema:\nSchema of v2 scan:      %s\nSchema of v1 relation:  %s" ]
   },
   "GROUPING_COLUMN_MISMATCH" : {
     "message" : [ "Column of grouping (%s) can't be found in grouping columns %s" ],
@@ -29,9 +61,16 @@
     "message" : [ "Invalid pivot column '%s'. Pivot columns must be comparable." ],
     "sqlState" : "42000"
   },
+  "INCOMPATIBLE_DATASOURCE_REGISTER_ERROR" : {
+    "message" : [ "Detected an incompatible DataSourceRegister. Please remove the incompatible\nlibrary from classpath or upgrade it. Error: %s" ],
+    "sqlState" : "42000"
+  },
   "INVALID_FIELD_NAME" : {
     "message" : [ "Field name %s is invalid: %s is not a struct." ],
     "sqlState" : "42000"
+  },
+  "JOB_ABORTED_ERROR" : {
+    "message" : [ "Job aborted." ]
   },
   "MISSING_COLUMN" : {
     "message" : [ "cannot resolve '%s' given input columns: [%s]" ],
@@ -40,6 +79,10 @@
   "MISSING_STATIC_PARTITION_COLUMN" : {
     "message" : [ "Unknown static partition column: %s" ],
     "sqlState" : "42000"
+  },
+  "MULTIPLE_PATHS_SPECIFIED_ERROR" : {
+    "message" : [ "Expected exactly one path to be specified, but got: %s" ],
+    "sqlState" : "4600D"
   },
   "NON_LITERAL_PIVOT_VALUES" : {
     "message" : [ "Literal expressions required for pivot values, found '%s'" ],
@@ -53,12 +96,43 @@
     "message" : [ "Invalid pivot value '%s': value data type %s does not match pivot column data type %s" ],
     "sqlState" : "42000"
   },
+  "READ_CURRENT_FILE_NOT_FOUND_ERROR" : {
+    "message" : [ "%s\nIt is possible the underlying files have been updated. You can explicitly invalidate\nthe cache in Spark by running 'REFRESH TABLE tableName' command in SQL or by\nrecreating the Dataset/DataFrame involved." ],
+    "sqlState" : "42000"
+  },
+  "REMOVED_CLASS_IN_SPARK2_ERROR" : {
+    "message" : [ "%s was removed in Spark 2.0. Please check if your library is compatible with Spark 2.0" ],
+    "sqlState" : "42000"
+  },
   "SECOND_FUNCTION_ARGUMENT_NOT_INTEGER" : {
     "message" : [ "The second argument of '%s' function needs to be an integer." ],
     "sqlState" : "22023"
   },
+  "SPARK_UPGRADE_IN_READING_DATES_ERROR" : {
+    "message" : [ "reading dates before 1582-10-15 or timestamps before 1900-01-01T00:00:00Z from %s\nfiles can be ambiguous, as the files may be written by Spark 2.x or legacy versions of\nHive, which uses a legacy hybrid calendar that is different from Spark 3.0+'s Proleptic\nGregorian calendar. See more details in SPARK-31404. You can set the SQL config\n'%s' or the datasource option '%s' to 'LEGACY' to rebase the datetime values\nw.r.t. the calendar difference during reading. To read the datetime values as it is,\nset the SQL config '%s' or the datasource option '%s' to 'CORRECTED'." ],
+    "sqlState" : "22008"
+  },
+  "SPARK_UPGRADE_IN_WRITING_DATES_ERROR" : {
+    "message" : [ " writing dates before 1582-10-15 or timestamps before 1900-01-01T00:00:00Z into %s\nfiles can be dangerous, as the files may be read by Spark 2.x or legacy versions of Hive\nlater, which uses a legacy hybrid calendar that is different from Spark 3.0+'s Proleptic\nGregorian calendar. See more details in SPARK-31404. You can set %s to 'LEGACY' to\nrebase the datetime values w.r.t. the calendar difference during writing, to get maximum\ninteroperability. Or set %s to 'CORRECTED' to write the datetime values as it is,\nif you are 100% sure that the written files will only be read by Spark 3.0+ or other\nsystems that use Proleptic Gregorian calendar." ],
+    "sqlState" : "22008"
+  },
+  "STREAMED_OPERATOR_UNSUPPORTED_BY_DATASOURCE_ERROR" : {
+    "message" : [ "Data source %s does not support streamed %s" ],
+    "sqlState" : "25007"
+  },
+  "TASK_FAILED_WHILE_WRITING_ROWS_ERROR" : {
+    "message" : [ "Task failed while writing rows." ]
+  },
   "UNABLE_TO_ACQUIRE_MEMORY" : {
     "message" : [ "Unable to acquire %s bytes of memory, got %s" ]
+  },
+  "UNSUPPORTED_SAVE_MODE_ERROR" : {
+    "message" : [ "unsupported save mode $%s (%s)" ],
+    "sqlState" : "42000"
+  },
+  "UN_RECOGNIZED_FILE_FORMAT_ERROR" : {
+    "message" : [ "unrecognized format %s" ],
+    "sqlState" : "42000"
   },
   "WRITING_JOB_ABORTED" : {
     "message" : [ "Writing job aborted" ],

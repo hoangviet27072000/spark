@@ -17,6 +17,8 @@
 
 package org.apache.spark
 
+import java.io.IOException
+
 class SparkException(
     message: String,
     cause: Throwable,
@@ -74,6 +76,123 @@ private[spark] class SparkUpgradeException(version: String, message: String, cau
  */
 class SparkArithmeticException(errorClass: String, messageParameters: Array[String])
   extends ArithmeticException(SparkThrowableHelper.getMessage(errorClass, messageParameters))
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * Unsupported Operation exception from Spark with an error class.
+ */
+class SparkUnsupportedOperationException(errorClass: String, messageParameters: Array[String])
+  extends UnsupportedOperationException(
+    SparkThrowableHelper.getMessage(errorClass, messageParameters))
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * Illegal Argument exception from Spark with an error class.
+ */
+class SparkIllegalArgumentException(errorClass: String, messageParameters: Array[String])
+  extends IllegalArgumentException(
+    SparkThrowableHelper.getMessage(errorClass, messageParameters))
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * Class doesn't be found exception from Spark with an error class.
+ */
+class SparkClassNotFoundException(
+      errorClass: String,
+      messageParameters: Array[String],
+      cause: Throwable)
+  extends ClassNotFoundException(
+    SparkThrowableHelper.getMessage(errorClass, messageParameters))
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * Illegal State exception from Spark with an error class.
+ */
+class SparkIllegalStateException(errorClass: String, messageParameters: Array[String])
+  extends IllegalStateException(
+    SparkThrowableHelper.getMessage(errorClass, messageParameters))
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * Spark Upgrade exception from Spark with an error.
+ */
+class SparkUpgradeExceptionSUE(
+      version: String,
+      errorClass: String,
+      messageParameters: Array[String],
+      cause: Throwable)
+  extends SparkUpgradeException(
+    version,
+    SparkThrowableHelper.getMessage(errorClass, messageParameters),
+    cause)
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * File not found exception from Spark with an error.
+ */
+class SparkFileNotFoundException(errorClass: String, messageParameters: Array[String])
+  extends IOException(
+  SparkThrowableHelper.getMessage(errorClass, messageParameters))
+  with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * IO exception from Spark with an error
+ */
+class SparkIOException(errorClass: String, messageParameters: Array[String])
+  extends IOException(
+  SparkThrowableHelper.getMessage(errorClass, messageParameters))
+  with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * Runtime exception from Spark with an error
+ */
+class SparkRuntimeException(errorClass: String, messageParameters: Array[String])
+  extends RuntimeException(
+    SparkThrowableHelper.getMessage(errorClass, messageParameters))
+    with SparkThrowable {
+
+  override def getErrorClass: String = errorClass
+  override def getSqlState: String = SparkThrowableHelper.getSqlState(errorClass)
+}
+
+/**
+ * No Such element exception from Spark with an error
+ */
+class SparkNoSuchElementException(errorClass: String, messageParameters: Array[String])
+  extends NoSuchElementException(
+    SparkThrowableHelper.getMessage(errorClass, messageParameters))
     with SparkThrowable {
 
   override def getErrorClass: String = errorClass
